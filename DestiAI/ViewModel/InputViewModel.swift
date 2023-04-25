@@ -6,11 +6,15 @@
 //
 
 import Foundation
+import MapKit
 
 class InputViewModel: ObservableObject {
   
-  let pageCount = PromptData.numberOfCategories() + 2
   
+  // welcome, location and prompt view
+  let numberOfExtraPages = 3
+
+  @Published var maxPage = 0
   @Published var currentPage = 0 {
     didSet {
       if maxPage < currentPage {
@@ -18,8 +22,10 @@ class InputViewModel: ObservableObject {
       }
     }
   }
-  @Published var maxPage = 0
-  @Published private(set) var prompt: String = ""
+
+  @Published var city: String?
+  
+  @Published private(set) var prompt = ""
   @Published private(set) var currentOptionsSelected = [Int: Int]()
   
   func numberOfQuestions() -> Int {
@@ -40,9 +46,14 @@ class InputViewModel: ObservableObject {
   
   func select(option: Int, for page: Int) {
     currentOptionsSelected[page] = option
-    prompt = PromptData.prompt(for: currentOptionsSelected)
-    if currentPage < pageCount - 1 {
+    prompt = PromptData.prompt(for: currentOptionsSelected, city: city)
+    if currentPage < numberOfQuestions() + numberOfExtraPages - 1 {
       currentPage += 1
     }
+  }
+  
+  func clearSelection() {
+    currentOptionsSelected = [:]
+    maxPage = currentPage
   }
 }

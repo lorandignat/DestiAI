@@ -15,7 +15,7 @@ struct DestiAIApp: App {
         NavigationView()
           .background(Color.primaryLight)
 #if os(macOS)
-          .frame(minWidth: 600, idealWidth: 960, minHeight: 600, idealHeight: 960)
+          .frame(minWidth: 800, idealWidth: 960, minHeight: 600, idealHeight: 960)
 #endif
       }
     }

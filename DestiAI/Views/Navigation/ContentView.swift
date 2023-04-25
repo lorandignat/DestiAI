@@ -14,8 +14,11 @@ struct ContentView: View {
   
   var body: some View {
     ZStack {
-      InputView()
-        .environmentObject(inputViewModel)
+      if navigationViewModel.selectedItem == nil ||
+         navigationViewModel.selectedItem == 0 {
+        InputView()
+          .environmentObject(inputViewModel)
+      }
       
 #if !os(macOS)
       if UIDevice.current.userInterfaceIdiom == .phone {
@@ -53,5 +56,6 @@ struct ContentView_Previews: PreviewProvider {
   static var previews: some View {
     ContentView()
       .environmentObject(NavigationViewModel())
+      .environmentObject(InputViewModel())
   }
 }

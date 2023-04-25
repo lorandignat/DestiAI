@@ -11,6 +11,7 @@ struct InputView: View {
   
   @EnvironmentObject var inputViewModel: InputViewModel
   
+  // Animation
   @State private var isScrollAnimation = false
   @State private var scrollUpOpacityAnimation = 0.0
   @State private var scrollDownOpacityAnimation = 0.0
@@ -25,6 +26,9 @@ struct InputView: View {
             WelcomeView()
               .frame(width: geo.size.width, height: geo.size.height)
               .environmentObject(inputViewModel)
+            LocationView()
+              .frame(width: geo.size.width, height: geo.size.height)
+              .environmentObject(inputViewModel)
             ForEach(0..<inputViewModel.numberOfQuestions(), id: \.self) { index in
               ZStack {
                 Rectangle()
@@ -35,19 +39,23 @@ struct InputView: View {
                   .frame(width: geo.size.width, height: geo.size.height)
               }
             }
-            PromptView(onSearch: nil)
+            PromptView()
               .frame(width: geo.size.width, height: geo.size.height)
               .environmentObject(inputViewModel)
           }
         }
         .content.offset(y: -geo.size.height * CGFloat(pagesScrolledAnimation))
         .frame(maxHeight: .infinity)
-      }.gesture(
+        .scrollContentBackground(.hidden)
+      }.simultaneousGesture(
         DragGesture()
           .onEnded { value in
             let delta = value.translation.height
             let sensitivity: CGFloat = 100
-            if delta < -sensitivity && inputViewModel.currentPage < inputViewModel.pageCount - 1 && inputViewModel.currentPage < inputViewModel.maxPage {
+            let totalPages = inputViewModel.numberOfQuestions() + inputViewModel.numberOfExtraPages
+            if delta < -sensitivity &&
+                inputViewModel.currentPage < totalPages - 1 &&
+                inputViewModel.currentPage < inputViewModel.maxPage {
               isScrollAnimation = true
               inputViewModel.currentPage += 1
             } else if delta > sensitivity && inputViewModel.currentPage > 0 {
@@ -56,6 +64,36 @@ struct InputView: View {
             }
           }
       )
+      
+      VStack {
+        ForEach(0..<inputViewModel.numberOfQuestions() + inputViewModel.numberOfExtraPages, id: \.self) { index in
+          HStack {
+            Spacer()
+            ZStack {
+              HStack{
+              Text("\(index + 1)")
+                .foregroundColor(inputViewModel.currentPage == index ? Color.contrast :
+                                  index <= inputViewModel.maxPage ? Color.primaryDark : Color.primaryMedium)
+                .font(Font.custom("HelveticaNeue", size: 12))
+              Rectangle()
+                .fill(inputViewModel.currentPage == index ? Color.contrast :
+                        index <= inputViewModel.maxPage ? Color.primaryDark : Color.primaryMedium)
+                .frame(width: 2)
+                .padding(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
+              }
+            }
+            .clipShape(Rectangle())
+            .contentShape(Rectangle())
+            .onTapGesture {
+              if index <= inputViewModel.maxPage {
+                inputViewModel.currentPage = index
+              }
+            }
+          }
+        }
+      }
+      .padding(EdgeInsets(top: 24, leading: 0, bottom: 24, trailing: 4))
+      .frame(height: geo.size.height)
       
       VStack {
         Text("↑ scroll up ↑")
@@ -77,27 +115,34 @@ struct InputView: View {
       }
     }
     .onChange(of: inputViewModel.currentPage) { newValue in
-      let animate = {
-        withAnimation(Animation.easeInOut(duration: 0.5)) {
-          pagesScrolledAnimation = newValue
-          scrollUpOpacityAnimation = newValue > 0 ? 1 : 0
-          scrollDownOpacityAnimation = newValue < inputViewModel.maxPage ? 1 : 0
-        }
-      }
-      if !isScrollAnimation {
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(250)) {
-          animate()
-        }
-      } else {
-        animate()
-      }
-      isScrollAnimation = false
+      animateView(for: newValue)
+    }
+    .onChange(of: inputViewModel.maxPage) { _ in
+      animateView(for: inputViewModel.currentPage)
     }
     .onAppear {
       pagesScrolledAnimation = inputViewModel.currentPage
       scrollUpOpacityAnimation = inputViewModel.currentPage > 0 ? 1 : 0
       scrollDownOpacityAnimation = inputViewModel.currentPage < inputViewModel.maxPage ? 1 : 0
     }
+  }
+  
+  private func animateView(for currentPage: Int) {
+    let animate = {
+      withAnimation(Animation.easeInOut(duration: 0.5)) {
+        pagesScrolledAnimation = currentPage
+        scrollUpOpacityAnimation = currentPage > 0 ? 1 : 0
+        scrollDownOpacityAnimation = currentPage < inputViewModel.maxPage ? 1 : 0
+      }
+    }
+    if !isScrollAnimation {
+      DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(250)) {
+        animate()
+      }
+    } else {
+      animate()
+    }
+    isScrollAnimation = false
   }
 }
 

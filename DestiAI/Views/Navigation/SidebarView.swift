@@ -12,20 +12,23 @@ struct SidebarView: View {
   @EnvironmentObject var navigationViewModel: NavigationViewModel
   
   var body: some View {
+    ZStack {
+      Color.primaryMedium.ignoresSafeArea()
       List(selection: $navigationViewModel.selectedItem) {
 #if !os(macOS)
-          if UIDevice.current.userInterfaceIdiom == .phone {
-            mainSectionItem
-              .background(Color.contrast)
-              .listRowBackground(Color.primaryMedium)
-          } else {
-            mainSectionItem
-          }
-#else
+        if UIDevice.current.userInterfaceIdiom == .phone {
           mainSectionItem
+            .background(Color.contrast)
+            .listRowBackground(Color.primaryMedium)
+        } else {
+          mainSectionItem
+        }
+#else
+        mainSectionItem
 #endif
       }
-      .padding(EdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0))
+      .scrollContentBackground(.hidden)
+    }
   }
   
   var mainSectionItem: some View {
@@ -33,9 +36,9 @@ struct SidebarView: View {
       Spacer()
       Text("DestiAI")
 #if os(macOS)
-        .font(Font.custom("HelveticaNeue", size: 16))
+        .font(Font.custom("HelveticaNeue-Bold", size: 16))
 #else
-        .font(Font.custom("HelveticaNeue", size: 24))
+        .font(Font.custom("HelveticaNeue-Bold", size: 24))
 #endif
         .foregroundColor(Color.primaryLight)
       Spacer()

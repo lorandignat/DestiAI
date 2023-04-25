@@ -51,7 +51,7 @@ struct PromptData {
     return options
   }
   
-  static func prompt(for values: [Int: Int]) -> String {
+  static func prompt(for values: [Int: Int], city: String?) -> String {
     
     var distance: String?
     var period: String?
@@ -82,16 +82,17 @@ struct PromptData {
           let period = period,
           let budget = budget,
           let weather = weather,
-          let activities = activities else {
+          let activities = activities,
+          let city = city else {
       return ""
     }
-    return "Suggest a \(budget) travel destination for \(period) that is \(distance) away from Cluj, Romania. Where I can \(activities). It should have \(weather) weather."
+    return "Suggest a \(budget) travel destination for \(period) that is \(distance) away from \(city). I want to \(activities) and it should have \(weather) weather."
   }
   
   static private func promptOptions(for category: PromptCategory) -> [(option: String, prompt: String)] {
     switch category {
     case .distance:
-      return [(option: "nearby", prompt: "a drive distance"),
+      return [(option: "nearby", prompt: "drive distance"),
               (option: "not too far", prompt: "a flight distance"),
               (option: "far", prompt: "really far")]
     case .period:
