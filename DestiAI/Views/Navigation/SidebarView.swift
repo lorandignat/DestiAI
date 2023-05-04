@@ -10,41 +10,81 @@ import SwiftUI
 struct SidebarView: View {
   
   @EnvironmentObject var navigationViewModel: NavigationViewModel
-  
+  @EnvironmentObject var suggestionViewModel: SuggestionViewModel
+
   var body: some View {
-    ZStack {
-      Color.primaryMedium.ignoresSafeArea()
-      List(selection: $navigationViewModel.selectedItem) {
-#if !os(macOS)
-        if UIDevice.current.userInterfaceIdiom == .phone {
-          mainSectionItem
-            .background(Color.contrast)
-            .listRowBackground(Color.primaryMedium)
-        } else {
-          mainSectionItem
-        }
+    List(selection: $navigationViewModel.selectedItem) {
+      Section() {
+        HStack {
+          Spacer()
+          Text("DestiAI")
+#if os(macOS)
+            .font(Font.custom("HelveticaNeue-Bold", size: 16))
 #else
-        mainSectionItem
+            .font(Font.custom("HelveticaNeue-Bold", size: 24))
+#endif
+            .foregroundColor(Color.primaryLight)
+          Spacer()
+        }
+        .deleteDisabled(true)
+        .tag(0)
+        .padding(EdgeInsets(top: 20, leading: 0, bottom: 20, trailing: 0))
+        .listRowBackground(Color.clear)
+        .listRowSeparator(.hidden)
+#if !os(macOS)
+        .background(UIDevice.current.userInterfaceIdiom == .phone
+                    ? (navigationViewModel.lastItemSelected == 0
+                       ? Color.contrast : Color.primaryMedium)
+                    : (navigationViewModel.selectedItem == 0 || navigationViewModel.selectedItem == nil
+                       ? Color.contrast : Color.primaryMedium))
+#else
+        .background(navigationViewModel.selectedItem == 0 || navigationViewModel.selectedItem == nil
+                    ? Color.contrast : Color.primaryMedium)
 #endif
       }
-      .scrollContentBackground(.hidden)
-    }
-  }
-  
-  var mainSectionItem: some View {
-    HStack {
-      Spacer()
-      Text("DestiAI")
+      
+      Section(header:
+                HStack {
+        Text("History")
+          .foregroundColor(Color.primaryDark)
+          .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
+        Spacer()
+      }) {
+        ForEach(0..<suggestionViewModel.suggestions.count, id: \.self) { index in
+          HStack {
+            Text(suggestionViewModel.suggestions[index].location)
 #if os(macOS)
-        .font(Font.custom("HelveticaNeue-Bold", size: 16))
+              .font(Font.custom("HelveticaNeue-Bold", size: 12))
 #else
-        .font(Font.custom("HelveticaNeue-Bold", size: 24))
+              .font(Font.custom("HelveticaNeue-Bold", size: 16))
 #endif
-        .foregroundColor(Color.primaryLight)
-      Spacer()
+              .foregroundColor(Color.primaryLight)
+              .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
+            Spacer()
+          }
+          .tag(index + 1)
+          .listRowBackground(Color.primaryMedium)
+#if !os(macOS)
+          .background(UIDevice.current.userInterfaceIdiom == .phone
+                      ? (navigationViewModel.lastItemSelected == index + 1
+                         ? Color.contrast : Color.primaryMedium)
+                      : (navigationViewModel.selectedItem == index + 1
+                         ? Color.contrast : Color.primaryMedium))
+#else
+          .background(navigationViewModel.selectedItem == index + 1
+                      ? Color.contrast : Color.primaryMedium)
+#endif
+        }
+        .background(Color.primaryMedium)
+        .listRowBackground(Color.clear)
+        .listRowSeparator(.hidden)
+      }
     }
-    .tag(0)
-    .padding(EdgeInsets(top: 20, leading: 0, bottom: 20, trailing: 0))
+    .listStyle(.insetGrouped)
+    .tint(Color.primaryMedium)
+    .accentColor(Color.primaryMedium)
+    .background(Color.primaryMedium)
+    .scrollContentBackground(.hidden)
   }
 }
 

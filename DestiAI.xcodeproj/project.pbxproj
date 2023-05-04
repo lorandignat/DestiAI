@@ -32,6 +32,12 @@
 		F1628C4929F6752400F15463 /* LocationPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1628C4829F6752400F15463 /* LocationPickerView.swift */; };
 		F1628C4B29F686E100F15463 /* GeocoderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1628C4A29F686E100F15463 /* GeocoderService.swift */; };
 		F1628C4D29F6879A00F15463 /* AppleGeocoderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1628C4C29F6879A00F15463 /* AppleGeocoderService.swift */; };
+		F1B5BF562A00F2F500E98432 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B5BF552A00F2F500E98432 /* SearchView.swift */; };
+		F1B5BF582A023F5400E98432 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B5BF572A023F5400E98432 /* SearchViewModel.swift */; };
+		F1B5BF5A2A02478600E98432 /* ChatGPTService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B5BF592A02478600E98432 /* ChatGPTService.swift */; };
+		F1B5BF5C2A02766100E98432 /* Suggestion.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B5BF5B2A02766100E98432 /* Suggestion.swift */; };
+		F1B5BF5E2A028A9300E98432 /* SuggestionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B5BF5D2A028A9300E98432 /* SuggestionViewModel.swift */; };
+		F1B5BF602A028C7D00E98432 /* SuggestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B5BF5F2A028C7D00E98432 /* SuggestionView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,6 +88,12 @@
 		F1628C4829F6752400F15463 /* LocationPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPickerView.swift; sourceTree = "<group>"; };
 		F1628C4A29F686E100F15463 /* GeocoderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeocoderService.swift; sourceTree = "<group>"; };
 		F1628C4C29F6879A00F15463 /* AppleGeocoderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleGeocoderService.swift; sourceTree = "<group>"; };
+		F1B5BF552A00F2F500E98432 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
+		F1B5BF572A023F5400E98432 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
+		F1B5BF592A02478600E98432 /* ChatGPTService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatGPTService.swift; sourceTree = "<group>"; };
+		F1B5BF5B2A02766100E98432 /* Suggestion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Suggestion.swift; sourceTree = "<group>"; };
+		F1B5BF5D2A028A9300E98432 /* SuggestionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionViewModel.swift; sourceTree = "<group>"; };
+		F1B5BF5F2A028C7D00E98432 /* SuggestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -199,6 +211,7 @@
 			children = (
 				F102952729F1349600C8CA5E /* Navigation */,
 				F102952A29F1583900C8CA5E /* AI */,
+				F1B5BF612A028C8100E98432 /* Suggestion */,
 				F151CED329F6A2ED00B2CDE2 /* View */,
 			);
 			path = Views;
@@ -210,6 +223,8 @@
 				F102952529F1343000C8CA5E /* NavigationViewModel.swift */,
 				F106CD6829EFD0D8004BC0D2 /* InputViewModel.swift */,
 				F1628C4629F66AC100F15463 /* LocationViewModel.swift */,
+				F1B5BF572A023F5400E98432 /* SearchViewModel.swift */,
+				F1B5BF5D2A028A9300E98432 /* SuggestionViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -217,6 +232,7 @@
 		F106CD7029EFE297004BC0D2 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				F1B5BF592A02478600E98432 /* ChatGPTService.swift */,
 				F1628C4A29F686E100F15463 /* GeocoderService.swift */,
 				F1628C4C29F6879A00F15463 /* AppleGeocoderService.swift */,
 			);
@@ -228,6 +244,7 @@
 			children = (
 				F106CD7C29EFFB29004BC0D2 /* PromptData.swift */,
 				F151CECF29F6A2A200B2CDE2 /* IdentifiableLocation.swift */,
+				F1B5BF5B2A02766100E98432 /* Suggestion.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -236,6 +253,7 @@
 			isa = PBXGroup;
 			children = (
 				F151CED129F6A2C300B2CDE2 /* MapView.swift */,
+				F1B5BF552A00F2F500E98432 /* SearchView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -247,6 +265,14 @@
 				F151CED529F6A72E00B2CDE2 /* CLLocationCoordinate2D+Equatable.swift */,
 			);
 			path = Extenstions;
+			sourceTree = "<group>";
+		};
+		F1B5BF612A028C8100E98432 /* Suggestion */ = {
+			isa = PBXGroup;
+			children = (
+				F1B5BF5F2A028C7D00E98432 /* SuggestionView.swift */,
+			);
+			path = Suggestion;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -379,15 +405,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F1B5BF602A028C7D00E98432 /* SuggestionView.swift in Sources */,
+				F1B5BF582A023F5400E98432 /* SearchViewModel.swift in Sources */,
 				F102952F29F15BC700C8CA5E /* PromptView.swift in Sources */,
 				F1628C4929F6752400F15463 /* LocationPickerView.swift in Sources */,
 				F151CED629F6A72E00B2CDE2 /* CLLocationCoordinate2D+Equatable.swift in Sources */,
 				F151CED029F6A2A200B2CDE2 /* IdentifiableLocation.swift in Sources */,
+				F1B5BF562A00F2F500E98432 /* SearchView.swift in Sources */,
 				F102952429F12B9F00C8CA5E /* SidebarView.swift in Sources */,
 				F106CD3429EE886B004BC0D2 /* InputView.swift in Sources */,
 				F102952929F134AC00C8CA5E /* ContentView.swift in Sources */,
+				F1B5BF5A2A02478600E98432 /* ChatGPTService.swift in Sources */,
+				F1B5BF5C2A02766100E98432 /* Suggestion.swift in Sources */,
 				F106CD6329EEBB44004BC0D2 /* Color+DestiAI.swift in Sources */,
 				F106CD6929EFD0D8004BC0D2 /* InputViewModel.swift in Sources */,
+				F1B5BF5E2A028A9300E98432 /* SuggestionViewModel.swift in Sources */,
 				F106CD6129EEA5BE004BC0D2 /* QuestionsView.swift in Sources */,
 				F102953A29F2C52A00C8CA5E /* LocationView.swift in Sources */,
 				F1628C4B29F686E100F15463 /* GeocoderService.swift in Sources */,
@@ -558,6 +590,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DestiAI/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location acces is required in order to determine your home base.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
@@ -600,6 +633,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = DestiAI/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Location acces is required in order to determine your home base.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;

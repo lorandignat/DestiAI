@@ -17,7 +17,7 @@ struct WelcomeView: View {
   private static let currentPageIndex = 0
   
   // Animation
-  @State private var pagesCompletedAnimation = currentPageIndex
+  @State private var pageCompletedAnimation = currentPageIndex
   
   var body: some View {
     GeometryReader { geometry in
@@ -38,19 +38,19 @@ struct WelcomeView: View {
           inputViewModel.currentPage += 1
         }) {
           Text("let's get started")
-            .fontWeight(pagesCompletedAnimation > Self.currentPageIndex ? .bold : .regular)
+            .fontWeight(pageCompletedAnimation > Self.currentPageIndex ? .bold : .regular)
             .font(Font.custom("HelveticaNeue", size: 24))
             .foregroundColor(.contrast)
             .onChange(of: inputViewModel.maxPage) { newValue in
               withAnimation(Animation.easeInOut(duration: 0.1)) {
-                pagesCompletedAnimation = newValue
+                pageCompletedAnimation = newValue
               }
             }
             .onAppear() {
-              pagesCompletedAnimation = inputViewModel.maxPage
+              pageCompletedAnimation = inputViewModel.maxPage
             }
         }
-        .buttonStyle(PlainButtonStyle())
+        .buttonStyle(.plain)
         .frame(maxHeight: .infinity)
         
         Spacer()

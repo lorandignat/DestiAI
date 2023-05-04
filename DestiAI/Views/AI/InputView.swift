@@ -18,33 +18,33 @@ struct InputView: View {
   @State private var pagesScrolledAnimation = 0
 
   var body: some View {
-    GeometryReader { geo in
+    GeometryReader { geometry in
       ZStack {
         Color.primaryLight.ignoresSafeArea()
         ScrollView(.vertical, showsIndicators: true) {
           VStack(spacing: 0) {
             WelcomeView()
-              .frame(width: geo.size.width, height: geo.size.height)
+              .frame(width: geometry.size.width, height: geometry.size.height)
               .environmentObject(inputViewModel)
             LocationView()
-              .frame(width: geo.size.width, height: geo.size.height)
+              .frame(width: geometry.size.width, height: geometry.size.height)
               .environmentObject(inputViewModel)
             ForEach(0..<inputViewModel.numberOfQuestions(), id: \.self) { index in
               ZStack {
                 Rectangle()
                   .fill(Color.primaryLight)
-                  .frame(height: geo.size.height)
+                  .frame(height: geometry.size.height)
                 QuestionsView(questionIndex: index)
                   .environmentObject(inputViewModel)
-                  .frame(width: geo.size.width, height: geo.size.height)
+                  .frame(width: geometry.size.width, height: geometry.size.height)
               }
             }
             PromptView()
-              .frame(width: geo.size.width, height: geo.size.height)
+              .frame(width: geometry.size.width, height: geometry.size.height)
               .environmentObject(inputViewModel)
           }
         }
-        .content.offset(y: -geo.size.height * CGFloat(pagesScrolledAnimation))
+        .content.offset(y: -geometry.size.height * CGFloat(pagesScrolledAnimation))
         .frame(maxHeight: .infinity)
         .scrollContentBackground(.hidden)
       }.simultaneousGesture(
@@ -65,54 +65,8 @@ struct InputView: View {
           }
       )
       
-      VStack {
-        ForEach(0..<inputViewModel.numberOfQuestions() + inputViewModel.numberOfExtraPages, id: \.self) { index in
-          HStack {
-            Spacer()
-            ZStack {
-              HStack{
-              Text("\(index + 1)")
-                .foregroundColor(inputViewModel.currentPage == index ? Color.contrast :
-                                  index <= inputViewModel.maxPage ? Color.primaryDark : Color.primaryMedium)
-                .font(Font.custom("HelveticaNeue", size: 12))
-              Rectangle()
-                .fill(inputViewModel.currentPage == index ? Color.contrast :
-                        index <= inputViewModel.maxPage ? Color.primaryDark : Color.primaryMedium)
-                .frame(width: 2)
-                .padding(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
-              }
-            }
-            .clipShape(Rectangle())
-            .contentShape(Rectangle())
-            .onTapGesture {
-              if index <= inputViewModel.maxPage {
-                inputViewModel.currentPage = index
-              }
-            }
-          }
-        }
-      }
-      .padding(EdgeInsets(top: 24, leading: 0, bottom: 24, trailing: 4))
-      .frame(height: geo.size.height)
-      
-      VStack {
-        Text("↑ scroll up ↑")
-          .padding(EdgeInsets(top: 5, leading: 0, bottom: 0, trailing: 0))
-          .font(Font.custom("HelveticaNeue", size: 12))
-          .foregroundColor(.primaryMedium)
-          .frame(width: geo.size.width)
-          .multilineTextAlignment(.center)
-          .transition(.asymmetric(insertion: .scale, removal: .scale))
-          .opacity(scrollUpOpacityAnimation)
-        Spacer()
-        Text("↓ scroll down ↓")
-          .font(Font.custom("HelveticaNeue", size: 12))
-          .foregroundColor(.primaryMedium)
-          .frame(width: geo.size.width)
-          .multilineTextAlignment(.center)
-          .transition(.asymmetric(insertion: .scale, removal: .scale))
-          .opacity(scrollDownOpacityAnimation)
-      }
+      pageIndex(for: geometry)
+      scrollLabels(for: geometry)
     }
     .onChange(of: inputViewModel.currentPage) { newValue in
       animateView(for: newValue)
@@ -124,6 +78,59 @@ struct InputView: View {
       pagesScrolledAnimation = inputViewModel.currentPage
       scrollUpOpacityAnimation = inputViewModel.currentPage > 0 ? 1 : 0
       scrollDownOpacityAnimation = inputViewModel.currentPage < inputViewModel.maxPage ? 1 : 0
+    }
+  }
+  
+  private func pageIndex(for geometry: GeometryProxy) -> some View {
+    VStack {
+      ForEach(0..<inputViewModel.numberOfQuestions() + inputViewModel.numberOfExtraPages, id: \.self) { index in
+        HStack {
+          Spacer()
+          ZStack {
+            HStack{
+            Text("\(index + 1)")
+              .foregroundColor(inputViewModel.currentPage == index ? Color.contrast :
+                                index <= inputViewModel.maxPage ? Color.primaryDark : Color.primaryMedium)
+              .font(Font.custom("HelveticaNeue", size: 12))
+            Rectangle()
+              .fill(inputViewModel.currentPage == index ? Color.contrast :
+                      index <= inputViewModel.maxPage ? Color.primaryDark : Color.primaryMedium)
+              .frame(width: 2)
+              .padding(EdgeInsets(top: 4, leading: 0, bottom: 4, trailing: 0))
+            }
+          }
+          .clipShape(Rectangle())
+          .contentShape(Rectangle())
+          .onTapGesture {
+            if index <= inputViewModel.maxPage {
+              inputViewModel.currentPage = index
+            }
+          }
+        }
+      }
+    }
+    .padding(EdgeInsets(top: 24, leading: 0, bottom: 24, trailing: 4))
+    .frame(height: geometry.size.height)
+  }
+  
+  private func scrollLabels(for geometry: GeometryProxy) -> some View {
+    VStack {
+      Text("↑ scroll up ↑")
+        .padding(EdgeInsets(top: 5, leading: 0, bottom: 0, trailing: 0))
+        .font(Font.custom("HelveticaNeue", size: 12))
+        .foregroundColor(.primaryMedium)
+        .frame(width: geometry.size.width)
+        .multilineTextAlignment(.center)
+        .transition(.asymmetric(insertion: .scale, removal: .scale))
+        .opacity(scrollUpOpacityAnimation)
+      Spacer()
+      Text("↓ scroll down ↓")
+        .font(Font.custom("HelveticaNeue", size: 12))
+        .foregroundColor(.primaryMedium)
+        .frame(width: geometry.size.width)
+        .multilineTextAlignment(.center)
+        .transition(.asymmetric(insertion: .scale, removal: .scale))
+        .opacity(scrollDownOpacityAnimation)
     }
   }
   

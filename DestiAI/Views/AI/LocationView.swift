@@ -18,7 +18,7 @@ struct LocationView: View {
   private static let currentPageIndex = 1
   
   // Animation
-  @State private var pagesCompletedAnimation = currentPageIndex
+  @State private var pageCompletedAnimation = currentPageIndex
   
 #if !os(macOS)
   @Environment(\.verticalSizeClass) private var verticalSizeClass
@@ -67,7 +67,7 @@ struct LocationView: View {
               .frame(width: 800, height: 600)
 #endif
           }
-          .buttonStyle(PlainButtonStyle())
+          .buttonStyle(.plain)
           
           Spacer()
             .frame(minHeight: 8, maxHeight: 48)
@@ -76,7 +76,7 @@ struct LocationView: View {
             inputViewModel.currentPage += 1
           }) {
             Text("yes")
-              .fontWeight(pagesCompletedAnimation > Self.currentPageIndex && inputViewModel.city == locationViewModel.city ? .bold : .regular)
+              .fontWeight(pageCompletedAnimation > Self.currentPageIndex && inputViewModel.city == locationViewModel.city ? .bold : .regular)
               .font(Font.custom("HelveticaNeue", size: 24))
               .foregroundColor(.contrast)
               .onChange(of: inputViewModel.maxPage) { newValue in
@@ -84,11 +84,14 @@ struct LocationView: View {
                   locationViewModel.stopSearchingForInitialLocation()
                 }
                 withAnimation(Animation.easeInOut(duration: 0.1)) {
-                  pagesCompletedAnimation = newValue
+                  pageCompletedAnimation = newValue
                 }
               }
+              .onAppear {
+                pageCompletedAnimation = inputViewModel.maxPage
+              }
           }
-          .buttonStyle(PlainButtonStyle())
+          .buttonStyle(.plain)
         }
         .frame(maxHeight: .infinity)
         

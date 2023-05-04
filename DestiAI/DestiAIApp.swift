@@ -16,6 +16,9 @@ struct DestiAIApp: App {
           .background(Color.primaryLight)
 #if os(macOS)
           .frame(minWidth: 800, idealWidth: 960, minHeight: 600, idealHeight: 960)
+#else
+          .toolbarColorScheme(ColorScheme.dark, for: .automatic)
+          .preferredColorScheme(.light)
 #endif
       }
     }

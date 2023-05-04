@@ -11,9 +11,10 @@ import SwiftUI
 
 struct PromptView: View {
   
-  @State private var isSearching = false
-  
   @EnvironmentObject var inputViewModel: InputViewModel
+  
+  // Animation
+  @State private var inputCompletedAnimation = false
   
 #if !os(macOS)
   @Environment(\.verticalSizeClass) private var verticalSizeClass
@@ -55,15 +56,20 @@ struct PromptView: View {
               .multilineTextAlignment(.center)
           }.frame(maxHeight: geometry.size.height / 3)
           Button(action: {
-            isSearching = !isSearching
+            inputViewModel.searching.toggle()
           }) {
             Text("looks good")
-              .fontWeight(isSearching ? .bold : .regular)
+              .fontWeight(inputCompletedAnimation ? .bold : .regular)
               .font(Font.custom("HelveticaNeue", size: 24))
               .foregroundColor(.contrast)
           }
-          .buttonStyle(PlainButtonStyle())
+          .buttonStyle(.plain)
           .frame(maxHeight: .infinity)
+          .onChange(of: inputViewModel.searching) { _ in
+            withAnimation(Animation.easeInOut(duration: 0.1)) {
+              inputCompletedAnimation = true
+            }
+          }
           Spacer()
             .frame(maxHeight: geometry.size.height / 6)
         }

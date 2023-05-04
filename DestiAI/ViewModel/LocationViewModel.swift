@@ -17,7 +17,7 @@ class LocationViewModel: NSObject, ObservableObject {
   
   // Services
   private let locationManager = CLLocationManager()
-  private var geocoderService: GeocoderService
+  private var geocoderService: GeocoderService = AppleGeocoderService()
   private var shouldStopSearchingForInitialLocation = false
   
   // Presentation State
@@ -38,8 +38,6 @@ class LocationViewModel: NSObject, ObservableObject {
   
   override init() {
     
-    geocoderService = AppleGeocoderService()
-    
     super.init()
       
     if !(readLocationData()) {
@@ -54,7 +52,6 @@ class LocationViewModel: NSObject, ObservableObject {
     shouldStopSearchingForInitialLocation = true
   }
 }
-
 
 extension LocationViewModel {
   

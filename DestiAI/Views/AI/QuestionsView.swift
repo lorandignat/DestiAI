@@ -16,7 +16,7 @@ struct QuestionsView: View {
   @EnvironmentObject var inputViewModel: InputViewModel
   
   // Animation
-  @State private var selectedIndexAnimation: Int?
+  @State private var questionCompletedAnimation: Int?
   
 #if !os(macOS)
   @Environment(\.verticalSizeClass) private var verticalSizeClass
@@ -51,19 +51,19 @@ struct QuestionsView: View {
               inputViewModel.select(option: index, for: questionIndex)
             }) {
               Text(inputViewModel.options(for: questionIndex)[index])
-                .fontWeight(selectedIndexAnimation == index ? .bold : .regular)
+                .fontWeight(questionCompletedAnimation == index ? .bold : .regular)
                 .font(Font.custom("HelveticaNeue", size: 24))
                 .foregroundColor(.contrast)
                 .onChange(of: inputViewModel.currentOptionsSelected) { newValue in
                   withAnimation(Animation.easeInOut(duration: 0.1)) {
-                    selectedIndexAnimation = newValue[questionIndex]
+                    questionCompletedAnimation = newValue[questionIndex]
                   }
                 }
                 .onAppear {
-                  selectedIndexAnimation = inputViewModel.currentOptionsSelected[questionIndex]
+                  questionCompletedAnimation = inputViewModel.currentOptionsSelected[questionIndex]
                 }
             }
-            .buttonStyle(PlainButtonStyle())
+            .buttonStyle(.plain)
           }
         }
         .frame(maxHeight: .infinity)

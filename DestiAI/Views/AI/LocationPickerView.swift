@@ -44,7 +44,7 @@ struct LocationPickerView: View {
               .font(Font.custom("HelveticaNeue", size: 20))
               .foregroundColor(.contrast)
               .minimumScaleFactor(0.75)
-              .buttonStyle(PlainButtonStyle())
+              .buttonStyle(.plain)
               .frame(height: 32)
               .padding(EdgeInsets(top: 16, leading: 32, bottom: 8, trailing: 32))
               .onAppear() {
@@ -74,7 +74,7 @@ struct LocationPickerView: View {
             }
             .font(Font.custom("HelveticaNeue-Bold", size: 20))
             .foregroundColor(.contrast)
-            .buttonStyle(PlainButtonStyle())
+            .buttonStyle(.plain)
             .frame(height: 32)
             .padding(EdgeInsets(top: 8, leading: 32, bottom: 16, trailing: 32))
           }

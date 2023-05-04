@@ -10,7 +10,6 @@ import MapKit
 
 class InputViewModel: ObservableObject {
   
-  
   // welcome, location and prompt view
   let numberOfExtraPages = 3
 
@@ -24,6 +23,8 @@ class InputViewModel: ObservableObject {
   }
 
   @Published var city: String?
+  
+  @Published var searching = false
   
   @Published private(set) var prompt = ""
   @Published private(set) var currentOptionsSelected = [Int: Int]()
@@ -55,5 +56,14 @@ class InputViewModel: ObservableObject {
   func clearSelection() {
     currentOptionsSelected = [:]
     maxPage = currentPage
+  }
+  
+  func resetValues() {
+    currentPage = 0
+    maxPage = 0
+    city = nil
+    searching = false
+    prompt = ""
+    currentOptionsSelected = [:]
   }
 }

@@ -13,44 +13,65 @@ struct NavigationView: View {
   
   @StateObject private var navigationViewModel = NavigationViewModel()
   @StateObject private var inputViewModel = InputViewModel()
+  @StateObject private var searchViewModel = SearchViewModel()
+  @StateObject private var suggestionViewModel = SuggestionViewModel()
+  
+  let searchView = SearchView()
   
   var body: some View {
-    NavigationSplitView(columnVisibility: $columnVisibility) {
-      ZStack {
-        SidebarView()
-          .background(Color.primaryMedium)
-          .gesture(
-            DragGesture()
-              .onEnded { value in
-                let delta = value.translation.width
-                let sensitivity: CGFloat = 100
-                if delta < -sensitivity  {
+    ZStack {
+      NavigationSplitView(columnVisibility: $columnVisibility) {
+        ZStack {
+          SidebarView()
+            .background(Color.primaryMedium)
+            .simultaneousGesture(
+              DragGesture()
+                .onEnded { value in
+                  let delta = value.translation.width
+                  let sensitivity: CGFloat = 100
+                  if delta < -sensitivity  {
 #if !os(macOS)
-                  if UIDevice.current.userInterfaceIdiom == .phone {
-                    navigationViewModel.selectedItem = 0
+                    if UIDevice.current.userInterfaceIdiom == .phone {
+                      navigationViewModel.selectedItem = navigationViewModel.lastItemSelected
+                    }
+#endif
                   }
-#endif
-                }
-              })
-      }
+                })
+        }
 #if os(macOS)
-      .navigationSplitViewColumnWidth(min: 250, ideal: 250, max: 350)
+        .navigationSplitViewColumnWidth(min: 250, ideal: 250, max: 350)
 #endif
-    } detail: {
-      ZStack {
-        ContentView()
-          .navigationBarBackButtonHidden(true)
+      } detail: {
+        ZStack {
+          ContentView()
+            .navigationBarBackButtonHidden(true)
+        }
       }
+      .onChange(of: inputViewModel.searching) { newValue in
+        if newValue {
+          searchViewModel.search(for: inputViewModel.prompt) { suggestion in
+            if let suggestion = suggestion {
+              inputViewModel.resetValues()
+              suggestionViewModel.add(suggestion: suggestion)
+              navigationViewModel.selectedItem = 1
+            }
+          }
+        }
+      }
+      .accentColor(Color.contrast)
+      .tint(Color.contrast)
+      .navigationSplitViewStyle(.balanced)
+#if os(macOS)
+      .toolbarBackground(Color.primaryMedium, for: .automatic)
+      .navigationTitle("")
+#endif
+      .environmentObject(navigationViewModel)
+      .environmentObject(suggestionViewModel)
+      .environmentObject(inputViewModel)
+      
+      SearchView()
+        .environmentObject(searchViewModel)
     }
-    .accentColor(Color.contrast)
-    .tint(Color.contrast)
-    .navigationSplitViewStyle(.balanced)
-#if os(macOS)
-    .toolbarBackground(Color.primaryMedium, for: .automatic)
-    .navigationTitle("")
-#endif
-    .environmentObject(navigationViewModel)
-    .environmentObject(inputViewModel)
   }
 }
 

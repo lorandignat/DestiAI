@@ -93,7 +93,7 @@ struct PromptData {
     switch category {
     case .distance:
       return [(option: "nearby", prompt: "drive distance"),
-              (option: "not too far", prompt: "a flight distance"),
+              (option: "not too far", prompt: "one flight distance"),
               (option: "far", prompt: "really far")]
     case .period:
       return [(option: "spring", prompt: "spring"),
@@ -101,7 +101,7 @@ struct PromptData {
               (option: "autumn", prompt: "autumn"),
               (option: "winter", prompt: "winter")]
     case .budget:
-      return [(option: "tight", prompt: "budget"),
+      return [(option: "tight", prompt: "cheap"),
               (option: "mid-range", prompt: "mid-range"),
               (option: "no limit", prompt: "luxury")]
     case .weather:
