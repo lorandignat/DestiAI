@@ -7,71 +7,25 @@
 
 import Foundation
 
-struct ChatGPTService {
+class ChatGPTService: SuggestionService {
   
-  private let url = URL(string: "https://mockbin.org/bin/896a50ca-cb34-425b-8c66-ac2ec14d71b2")!
-//  URL(string: "https://api.openai.com/v1/completions")!
-  
-  private let apiKey = ""
-//  "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"
+  private let url = URL(string: "https://mockbin.org/bin/d0ea6172-9e38-4775-9af8-e5ab24b0342f")!
+// URL(string: "https://api.openai.com/v1/completions")!
+  private let apiKey = "[CHAT_GPT_API_KEY]"
   
   private let guideline = "Answer in this JSON format: {\"location\":,\"description\":,\"weather\":,\"activities\":{\"activityName\":\"description\"},\"hotels\":{\"hotelName\":\"description\"}}"
   
-  func performRequest(for prompt: String, completion: @escaping (_ suggestion: Suggestion?) -> ()) {
+  func requestSuggestion(for prompt: String, completion: @escaping (_ suggestion: Suggestion?) -> ()) {
     
     guard let request = buildRequest(for: prompt) else {
       completion(nil)
       return
     }
-    
-    let session = URLSession.shared
-    let task = session.dataTask(with: request) { data, response, error in
+    perform(request: request, with: completion)
+  }
+}
 
-      if let error = error {
-        print("Error: \(error.localizedDescription)")
-        completion(nil)
-        return
-      }
-      
-      guard let data = data else {
-        print("No data received")
-        completion(nil)
-        return
-      }
-      
-      handleResponse(data: data, completion: completion)
-    }
-    task.resume()
-  }
-  
-  private func handleResponse(data: Data, completion: @escaping (_ suggestion: Suggestion?) -> ()) {
-    
-    // Parse the JSON response
-    do {
-      let json = try JSONSerialization.jsonObject(with: data, options: [])
-      print("Response: \(json)")
-      
-      if let json = json as? Dictionary<String, Any>,
-         let choices = json["choices"] as? Array<Any>,
-         let choice = choices.first as? Dictionary<String, Any>,
-         let text = choice["text"] as? String {
-        
-        let cleanedText = text.replacingOccurrences(of: "\\", with: "")
-        if let first = cleanedText.firstIndex(of: "{"),
-           let last = cleanedText.lastIndex(of: "}"),
-           let textData = String(cleanedText[first...last]).data(using: .utf8) {
-          
-          let suggestion = try JSONDecoder().decode(Suggestion.self, from: textData)
-          completion(suggestion)
-          return
-        }
-      }
-      completion(nil)
-    } catch {
-      print(error.localizedDescription)
-      completion(nil)
-    }
-  }
+extension ChatGPTService {
   
   private func buildRequest(for prompt: String) -> URLRequest? {
     
@@ -97,5 +51,69 @@ struct ChatGPTService {
       print(error.localizedDescription)
       return nil
     }
+  }
+  
+  private func perform(request: URLRequest, with completion: @escaping (_ suggestion: Suggestion?) -> ()) {
+    let session = URLSession.shared
+    let task = session.dataTask(with: request) { [weak self] data, response, error in
+      self?.handleResponse(data: data, response: response, error: error, completion: completion)
+    }
+    task.resume()
+  }
+  
+  private func handleResponse(data: Data?,
+                              response: URLResponse?,
+                              error: Error?,
+                              completion: @escaping (_ suggestion: Suggestion?) -> ()) {
+    
+    if let error = error {
+      print("Error: \(error.localizedDescription)")
+      completion(nil)
+      return
+    }
+    
+    guard let data = data else {
+      print("No data received")
+      completion(nil)
+      return
+    }
+    
+    // Parse the JSON response
+    do {
+      let json = try JSONSerialization.jsonObject(with: data, options: [])
+      print("Response: \(json)")
+      
+      if let textData = self.extractTextData(fromJsonObject: json) {
+          let suggestion = try JSONDecoder().decode(Suggestion.self, from: textData)
+          completion(suggestion)
+          return
+      }
+      completion(nil)
+    } catch {
+      print(error.localizedDescription)
+      completion(nil)
+    }
+  }
+  
+  private func extractTextData(fromJsonObject json: Any) -> Data? {
+    if let json = json as? Dictionary<String, Any>,
+       let choices = json["choices"] as? Array<Any>,
+       let choice = choices.first as? Dictionary<String, Any>,
+       let text = choice["text"] as? String,
+       let cleanedText = clean(text: text),
+       let textData = cleanedText.data(using: .utf8) {
+      return textData
+    }
+    return nil
+  }
+  
+  private func clean(text: String) -> String? {
+    
+    let cleanedText = text.replacingOccurrences(of: "\\", with: "")
+    if let first = cleanedText.firstIndex(of: "{"),
+       let last = cleanedText.lastIndex(of: "}") {
+      return String(cleanedText[first...last])
+    }
+    return nil
   }
 }

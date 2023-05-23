@@ -16,13 +16,13 @@ struct ContentView: View {
   var body: some View {
     ZStack {
       Color.primaryLight.ignoresSafeArea()
-      
+  
       if let selectedItem = navigationViewModel.selectedItem {
         if selectedItem == 0 {
           InputView()
             .environmentObject(inputViewModel)
         } else {
-          SuggestionView(suggestion: suggestionViewModel.suggestions[selectedItem - 1])
+            SuggestionView(suggestion: suggestionViewModel.suggestions[selectedItem - 1])
         }
       }
       

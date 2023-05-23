@@ -12,6 +12,7 @@ struct LocationView: View {
   
   @EnvironmentObject var inputViewModel: InputViewModel
   
+  // TODO: Refactor - VM factory/provider
   @StateObject var locationViewModel = LocationViewModel()
   
   // Hardcoded as the second view after welcome view

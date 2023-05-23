@@ -52,6 +52,7 @@ struct PromptView: View {
             Text(inputViewModel.prompt)
               .padding(EdgeInsets(top: 0, leading: geometry.size.width * 0.1, bottom: 0, trailing: geometry.size.width * 0.1))
               .font(Font.custom("HelveticaNeue", size: 24))
+              .minimumScaleFactor(0.8)
               .foregroundColor(.contrast)
               .multilineTextAlignment(.center)
           }.frame(maxHeight: geometry.size.height / 3)

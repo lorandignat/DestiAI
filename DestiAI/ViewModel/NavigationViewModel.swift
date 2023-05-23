@@ -9,7 +9,7 @@ import Foundation
 
 class NavigationViewModel: ObservableObject {
   
-  @Published private(set) var lastItemSelected: Int = 0
+  @Published var lastItemSelected: Int = 0
   @Published var selectedItem: Int? = 0 {
     didSet {
       if let selectedItem {

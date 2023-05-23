@@ -59,9 +59,9 @@ struct SearchView: View {
       }
       
     }.onChange(of: searchViewModel.searching) { newValue in
-        withAnimation(Animation.easeInOut.speed(0.4)) {
-          shouldShowCloudsAnimation = newValue
-        }
+      withAnimation(Animation.easeInOut.speed(0.4)) {
+        shouldShowCloudsAnimation = newValue
+      }
     }
   }
 }

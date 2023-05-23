@@ -11,7 +11,7 @@ struct SidebarView: View {
   
   @EnvironmentObject var navigationViewModel: NavigationViewModel
   @EnvironmentObject var suggestionViewModel: SuggestionViewModel
-
+  
   var body: some View {
     List(selection: $navigationViewModel.selectedItem) {
       Section() {
@@ -45,14 +45,15 @@ struct SidebarView: View {
       
       Section(header:
                 HStack {
-        Text("History")
-          .foregroundColor(Color.primaryDark)
-          .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
+        Text(suggestionViewModel.suggestions.count > 0 ? "History" :
+              "No search history")
+        .foregroundColor(Color.primaryDark)
+        .padding(EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0))
         Spacer()
       }) {
         ForEach(0..<suggestionViewModel.suggestions.count, id: \.self) { index in
           HStack {
-            Text(suggestionViewModel.suggestions[index].location)
+            Text("\(suggestionViewModel.suggestions[index].date.getFormattedDate(format: "MMM dd")) - \(suggestionViewModel.suggestions[index].location)")
 #if os(macOS)
               .font(Font.custom("HelveticaNeue-Bold", size: 12))
 #else
@@ -61,6 +62,12 @@ struct SidebarView: View {
               .foregroundColor(Color.primaryLight)
               .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
             Spacer()
+            Image(systemName: "trash")
+              .onTapGesture {
+                delete(index: index)
+              }
+              .foregroundColor(Color.primaryLight)
+              .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
           }
           .tag(index + 1)
           .listRowBackground(Color.primaryMedium)
@@ -80,11 +87,22 @@ struct SidebarView: View {
         .listRowSeparator(.hidden)
       }
     }
+#if !os(macOS)
     .listStyle(.insetGrouped)
+#endif
     .tint(Color.primaryMedium)
     .accentColor(Color.primaryMedium)
     .background(Color.primaryMedium)
     .scrollContentBackground(.hidden)
+  }
+  
+  func delete(index: Int) {
+    if navigationViewModel.lastItemSelected == index + 1 {
+      navigationViewModel.selectedItem = index
+    } else if navigationViewModel.lastItemSelected >= index {
+      navigationViewModel.lastItemSelected -= 1
+    }
+    suggestionViewModel.remove(at: index)
   }
 }
 
@@ -92,5 +110,6 @@ struct SidebarView_Previews: PreviewProvider {
   static var previews: some View {
     SidebarView()
       .environmentObject(NavigationViewModel())
+      .environmentObject(SuggestionViewModel())
   }
 }

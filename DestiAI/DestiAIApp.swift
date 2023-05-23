@@ -12,7 +12,7 @@ struct DestiAIApp: App {
   var body: some Scene {
     WindowGroup {
       ZStack {
-        NavigationView()
+        SplitView()
           .background(Color.primaryLight)
 #if os(macOS)
           .frame(minWidth: 800, idealWidth: 960, minHeight: 600, idealHeight: 960)

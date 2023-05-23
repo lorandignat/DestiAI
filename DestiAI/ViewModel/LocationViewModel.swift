@@ -8,6 +8,8 @@
 import Foundation
 import MapKit
 
+// TODO: Refactor - split into LocationViewModel and LocationPickerViewModel
+
 class LocationViewModel: NSObject, ObservableObject {
   
   // Default Values
@@ -16,6 +18,7 @@ class LocationViewModel: NSObject, ObservableObject {
   static private let defaultCoordinates = CLLocationCoordinate2D(latitude: 37.332331, longitude: -122.031219)
   
   // Services
+  // TODO: Service factory/provider
   private let locationManager = CLLocationManager()
   private var geocoderService: GeocoderService = AppleGeocoderService()
   private var shouldStopSearchingForInitialLocation = false
@@ -53,13 +56,15 @@ class LocationViewModel: NSObject, ObservableObject {
   }
 }
 
+// TODO: Refactor - extract persistance logic
+
 extension LocationViewModel {
   
   private func writeLocationData() {
     
-    UserDefaults.standard.set(city, forKey: "locationViewModel.city")
-    UserDefaults.standard.set(region.center.latitude, forKey: "locationViewModel.latitude")
-    UserDefaults.standard.set(region.center.longitude, forKey: "locationViewModel.longitude")
+    UserDefaults.standard.set(city, forKey: "destiAi.locationViewModel.city")
+    UserDefaults.standard.set(region.center.latitude, forKey: "destiAi.locationViewModel.latitude")
+    UserDefaults.standard.set(region.center.longitude, forKey: "destiAi.locationViewModel.longitude")
   }
   
   private func readLocationData() -> Bool {

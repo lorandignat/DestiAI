@@ -12,20 +12,21 @@ struct SuggestionView: View {
   var suggestion: Suggestion
   
   var body: some View {
-    ZStack {
-      Color.primaryLight.ignoresSafeArea()
-      VStack {
-        Text(suggestion.location)
-        Text(suggestion.description)
-        Text(suggestion.weather)
-      }
+    
+    
+#if !os(macOS)
+    NavigationView {
+      SuggestionTitleView(location: suggestion.location, description: suggestion.description, image: suggestion.images?.first)
+        .navigationBarHidden(true)
     }
+#else
+    SuggestionTitleView(location: suggestion.location, description: suggestion.description, image: suggestion.images?.first)
+#endif
   }
 }
 
 struct SuggestionView_Previews: PreviewProvider {
   static var previews: some View {
-    SuggestionView(suggestion: Suggestion(location: "", description: "", weather: "", activities: [:], hotels: [:]))
+    SuggestionView(suggestion: Suggestion(location: "Cluj Napoca, Romania", description: "Cluj-Napoca, a city in northwestern Romania, is the unofficial capital of the Transylvania region. It's home to universities, vibrant nightlife and landmarks dating to Saxon and Hungarian rule."))
   }
 }
-

@@ -7,10 +7,11 @@
 
 import SwiftUI
 
-struct NavigationView: View {
+struct SplitView: View {
   
   @State private var columnVisibility = NavigationSplitViewVisibility.doubleColumn
   
+  // TODO: Refactor - VM factory/provider
   @StateObject private var navigationViewModel = NavigationViewModel()
   @StateObject private var inputViewModel = InputViewModel()
   @StateObject private var searchViewModel = SearchViewModel()
@@ -77,6 +78,6 @@ struct NavigationView: View {
 
 struct NavigationView_Previews: PreviewProvider {
   static var previews: some View {
-    NavigationView()
+    SplitView()
   }
 }
