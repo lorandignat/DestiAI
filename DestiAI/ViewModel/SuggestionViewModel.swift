@@ -22,14 +22,12 @@ class SuggestionViewModel: ObservableObject {
   
   func remove(at index: Int) {
     
-    for index in 0..<suggestions.count {
-      if let images = suggestions[index].images {
-        for index in 0..<images.count {
-          do {
-            try FileManager.default.removeItem(at: images[index])
-          } catch {
-            print(error.localizedDescription)
-          }
+    if let images = suggestions[index].images {
+      for index in 0..<images.count {
+        do {
+          try FileManager.default.removeItem(at: images[index])
+        } catch {
+          print(error.localizedDescription)
         }
       }
     }

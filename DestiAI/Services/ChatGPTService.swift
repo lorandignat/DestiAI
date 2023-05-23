@@ -14,6 +14,7 @@ class ChatGPTService: SuggestionService {
   private let apiKey = "[CHAT_GPT_API_KEY]"
   
   private let guideline = "Answer in this JSON format: {\"location\":,\"description\":,\"weather\":,\"activities\":{\"activityName\":\"description\"},\"hotels\":{\"hotelName\":\"description\"}}"
+  private let guideline = "Give answer exactly in this JSON format: {\"location\":,\"description\":,\"weather\":,\"activities\":{\"activityName\":\"description\",\"activityName\":\"description\",\"activityName\":\"description\"},\"hotels\":{\"hotelName\":\"description\",\"hotelName\":\"description\"}}"
   
   func requestSuggestion(for prompt: String, completion: @escaping (_ suggestion: Suggestion?) -> ()) {
     

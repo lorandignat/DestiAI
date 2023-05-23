@@ -69,9 +69,9 @@ extension LocationViewModel {
   
   private func readLocationData() -> Bool {
     
-    if let city = UserDefaults.standard.string(forKey: "locationViewModel.city") {
-      let latitude = UserDefaults.standard.double(forKey: "locationViewModel.latitude")
-      let longitude = UserDefaults.standard.double(forKey: "locationViewModel.longitude")
+    if let city = UserDefaults.standard.string(forKey: "destiAi.locationViewModel.city") {
+      let latitude = UserDefaults.standard.double(forKey: "destiAi.locationViewModel.latitude")
+      let longitude = UserDefaults.standard.double(forKey: "destiAi.locationViewModel.longitude")
       
       self.city = city
       self.region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: latitude, longitude: longitude), span: Self.defaultMapSpan)
