@@ -13,16 +13,14 @@ class ChatGPTService: SuggestionService {
 // URL(string: "https://api.openai.com/v1/completions")!
   private let apiKey = "[CHAT_GPT_API_KEY]"
   
-  private let guideline = "Answer in this JSON format: {\"location\":,\"description\":,\"weather\":,\"activities\":{\"activityName\":\"description\"},\"hotels\":{\"hotelName\":\"description\"}}"
   private let guideline = "Give answer exactly in this JSON format: {\"location\":,\"description\":,\"weather\":,\"activities\":{\"activityName\":\"description\",\"activityName\":\"description\",\"activityName\":\"description\"},\"hotels\":{\"hotelName\":\"description\",\"hotelName\":\"description\"}}"
   
-  func requestSuggestion(for prompt: String, completion: @escaping (_ suggestion: Suggestion?) -> ()) {
+  func requestSuggestion(for prompt: String) async -> Suggestion? {
     
     guard let request = buildRequest(for: prompt) else {
-      completion(nil)
-      return
+      return nil
     }
-    perform(request: request, with: completion)
+    return await perform(request: request)
   }
 }
 
@@ -54,29 +52,21 @@ extension ChatGPTService {
     }
   }
   
-  private func perform(request: URLRequest, with completion: @escaping (_ suggestion: Suggestion?) -> ()) {
-    let session = URLSession.shared
-    let task = session.dataTask(with: request) { [weak self] data, response, error in
-      self?.handleResponse(data: data, response: response, error: error, completion: completion)
+  private func perform(request: URLRequest) async -> Suggestion? {
+    do {
+      let (data, _) = try await URLSession.shared.data(for: request)
+      return handleResponse(data: data)
+    } catch {
+      print(error.localizedDescription)
+      return nil
     }
-    task.resume()
   }
   
-  private func handleResponse(data: Data?,
-                              response: URLResponse?,
-                              error: Error?,
-                              completion: @escaping (_ suggestion: Suggestion?) -> ()) {
-    
-    if let error = error {
-      print("Error: \(error.localizedDescription)")
-      completion(nil)
-      return
-    }
+  private func handleResponse(data: Data?) -> Suggestion? {
     
     guard let data = data else {
       print("No data received")
-      completion(nil)
-      return
+      return nil
     }
     
     // Parse the JSON response
@@ -86,13 +76,12 @@ extension ChatGPTService {
       
       if let textData = self.extractTextData(fromJsonObject: json) {
           let suggestion = try JSONDecoder().decode(Suggestion.self, from: textData)
-          completion(suggestion)
-          return
+          return suggestion
       }
-      completion(nil)
+      return nil
     } catch {
       print(error.localizedDescription)
-      completion(nil)
+      return nil
     }
   }
   

@@ -9,10 +9,11 @@ import SwiftUI
 
 struct SplitView: View {
   
-  @State private var columnVisibility = NavigationSplitViewVisibility.doubleColumn
+  @State var columnVisibility = NavigationSplitViewVisibility.doubleColumn
+  @State private var showingAlert = false
   
   // TODO: Refactor - VM factory/provider
-  @StateObject private var navigationViewModel = NavigationViewModel()
+  @StateObject private var navigationRouter = SplitViewNavigationRouter()
   @StateObject private var inputViewModel = InputViewModel()
   @StateObject private var searchViewModel = SearchViewModel()
   @StateObject private var suggestionViewModel = SuggestionViewModel()
@@ -24,6 +25,12 @@ struct SplitView: View {
       NavigationSplitView(columnVisibility: $columnVisibility) {
         ZStack {
           SidebarView()
+#if !os(macOS)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(.hidden, for: .automatic)
+#else
+            .toolbarBackground(Color.primaryMedium.opacity(0), for: .automatic)
+#endif
             .background(Color.primaryMedium)
             .simultaneousGesture(
               DragGesture()
@@ -32,9 +39,7 @@ struct SplitView: View {
                   let sensitivity: CGFloat = 100
                   if delta < -sensitivity  {
 #if !os(macOS)
-                    if UIDevice.current.userInterfaceIdiom == .phone {
-                      navigationViewModel.selectedItem = navigationViewModel.lastItemSelected
-                    }
+                navigationRouter.index = navigationRouter.lastIndex
 #endif
                   }
                 })
@@ -45,28 +50,34 @@ struct SplitView: View {
       } detail: {
         ZStack {
           ContentView()
-            .navigationBarBackButtonHidden(true)
+#if !os(macOS)
+            .navigationBarTitleDisplayMode(.inline)
+#endif
         }
       }
       .onChange(of: inputViewModel.searching) { newValue in
         if newValue {
-          searchViewModel.search(for: inputViewModel.prompt) { suggestion in
+          Task {
+            let suggestion = await searchViewModel.search(for: inputViewModel.prompt)
             if let suggestion = suggestion {
               inputViewModel.resetValues()
               suggestionViewModel.add(suggestion: suggestion)
-              navigationViewModel.selectedItem = 1
+              navigationRouter.index = 1
+            } else {
+              showingAlert = true
             }
           }
         }
       }
-      .accentColor(Color.contrast)
-      .tint(Color.contrast)
+      .alert(isPresented: $showingAlert) {
+          Alert(title: Text("Error"),
+                message: Text("Couldn't find a suggested location. Please try again later!"),
+                dismissButton: .default(Text("Okay")))
+      }
       .navigationSplitViewStyle(.balanced)
-#if os(macOS)
-      .toolbarBackground(Color.primaryMedium, for: .automatic)
       .navigationTitle("")
-#endif
-      .environmentObject(navigationViewModel)
+      .tint(Color.contrast)
+      .environmentObject(navigationRouter)
       .environmentObject(suggestionViewModel)
       .environmentObject(inputViewModel)
       

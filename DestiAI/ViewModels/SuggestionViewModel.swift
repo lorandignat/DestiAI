@@ -14,7 +14,7 @@ class SuggestionViewModel: ObservableObject {
   func add(suggestion: Suggestion) {
     suggestions.insert(suggestion, at: 0)
     
-    // TODO: Extract persistance logic, switch to CoreData
+    // TODO: Refactor - Extract persistance logic, switch to CoreData
     if let data = try? PropertyListEncoder().encode(suggestions) {
       UserDefaults.standard.set(data, forKey: "destiAi.suggestionsViewModel.suggestion")
     }
@@ -34,7 +34,7 @@ class SuggestionViewModel: ObservableObject {
     
     suggestions.remove(at: index)
     
-    // TODO: Extract persistance logic, switch to CoreData
+    // TODO: Refactor - Extract persistance logic, switch to CoreData
     if let data = try? PropertyListEncoder().encode(suggestions) {
       UserDefaults.standard.set(data, forKey: "destiAi.suggestionsViewModel.suggestion")
     }

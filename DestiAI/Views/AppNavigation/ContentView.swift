@@ -9,39 +9,21 @@ import SwiftUI
 
 struct ContentView: View {
   
-  @EnvironmentObject var navigationViewModel: NavigationViewModel
+  @EnvironmentObject var navigationRouter: SplitViewNavigationRouter
   @EnvironmentObject var inputViewModel: InputViewModel
   @EnvironmentObject var suggestionViewModel: SuggestionViewModel
   
   var body: some View {
     ZStack {
       Color.primaryLight.ignoresSafeArea()
-  
-      if let selectedItem = navigationViewModel.selectedItem {
+      if let selectedItem = navigationRouter.index {
         if selectedItem == 0 {
           InputView()
             .environmentObject(inputViewModel)
         } else {
-            SuggestionView(suggestion: suggestionViewModel.suggestions[selectedItem - 1])
+          SuggestionView(suggestion: suggestionViewModel.suggestions[selectedItem - 1])
         }
       }
-      
-#if !os(macOS)
-      if UIDevice.current.userInterfaceIdiom == .phone {
-        Button(action: {
-          navigationViewModel.selectedItem = nil
-        }) {
-          Image(systemName: "sidebar.left")
-            .resizable()
-            .scaledToFit()
-            .frame(width: 25, height: 25)
-            .padding(EdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20))
-        }
-        .frame(width: 35, height: 35)
-        .position(CGPoint(x: 30, y: 30))
-        .foregroundColor(.contrast)
-      }
-#endif
     }.simultaneousGesture(
       DragGesture()
         .onEnded { value in
@@ -50,7 +32,7 @@ struct ContentView: View {
           if delta > sensitivity {
 #if !os(macOS)
             if UIDevice.current.userInterfaceIdiom == .phone {
-              navigationViewModel.selectedItem = nil
+              navigationRouter.index = nil
             }
 #endif
           }
@@ -61,7 +43,7 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
   static var previews: some View {
     ContentView()
-      .environmentObject(NavigationViewModel())
+      .environmentObject(SplitViewNavigationRouter())
       .environmentObject(InputViewModel())
   }
 }

@@ -18,7 +18,7 @@ class LocationViewModel: NSObject, ObservableObject {
   static private let defaultCoordinates = CLLocationCoordinate2D(latitude: 37.332331, longitude: -122.031219)
   
   // Services
-  // TODO: Service factory/provider
+  // TODO: Refactor - Service factory/provider
   private let locationManager = CLLocationManager()
   private var geocoderService: GeocoderService = AppleGeocoderService()
   private var shouldStopSearchingForInitialLocation = false
@@ -61,14 +61,14 @@ class LocationViewModel: NSObject, ObservableObject {
 extension LocationViewModel {
   
   private func writeLocationData() {
-    
+
     UserDefaults.standard.set(city, forKey: "destiAi.locationViewModel.city")
     UserDefaults.standard.set(region.center.latitude, forKey: "destiAi.locationViewModel.latitude")
     UserDefaults.standard.set(region.center.longitude, forKey: "destiAi.locationViewModel.longitude")
   }
   
   private func readLocationData() -> Bool {
-    
+
     if let city = UserDefaults.standard.string(forKey: "destiAi.locationViewModel.city") {
       let latitude = UserDefaults.standard.double(forKey: "destiAi.locationViewModel.latitude")
       let longitude = UserDefaults.standard.double(forKey: "destiAi.locationViewModel.longitude")

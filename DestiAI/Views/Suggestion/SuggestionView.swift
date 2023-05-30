@@ -9,19 +9,105 @@ import SwiftUI
 
 struct SuggestionView: View {
   
-  var suggestion: Suggestion
+  @StateObject private var navigationRouter: SuggestionStackNavigationRouter
+  
+  init(suggestion: Suggestion) {
+    let navigationRouter = SuggestionStackNavigationRouter(suggestion: suggestion)
+    _navigationRouter = StateObject(wrappedValue: navigationRouter)
+  }
   
   var body: some View {
-    
-    
-#if !os(macOS)
-    NavigationView {
-      SuggestionTitleView(location: suggestion.location, description: suggestion.description, image: suggestion.images?.first)
-        .navigationBarHidden(true)
+    GeometryReader { geometry in
+      Color.primaryLight.ignoresSafeArea()
+      ZStack {
+        
+        StackNavigationView(navigationRouter: navigationRouter)
+        
+        // Note: This also works on iOS
+        //#if !os(macOS)
+        //        SuggestionStackView(navigationRouter: navigationRouter)
+        //          .ignoresSafeArea()
+        //#endif
+        
+        cloudsView(in: geometry)
+        navigationButtonsView()
+      }
     }
+  }
+  
+  func cloudsView(in geometry: GeometryProxy) -> some View {
+    ZStack {
+      Image(systemName: "cloud.fill")
+        .resizable()
+        .scaledToFit()
+        .frame(width: 200, height: 200)
+        .foregroundColor(.light)
+        .ignoresSafeArea()
+        .position(x: CGFloat(0 + Int.random(in: -10...10)), y: geometry.size.height)
+      Image(systemName: "cloud.fill")
+        .resizable()
+        .scaledToFit()
+        .frame(width: 200, height: 200)
+        .foregroundColor(.light)
+        .ignoresSafeArea()
+        .position(x: CGFloat(100 + Int.random(in: -10...10)), y: geometry.size.height)
+      Image(systemName: "cloud.fill")
+        .resizable()
+        .scaledToFit()
+        .frame(width: 200, height: 200)
+        .foregroundColor(.light)
+        .ignoresSafeArea()
+        .position(x: CGFloat(Int(geometry.size.width) - 100 + Int.random(in: -10...10)), y: geometry.size.height)
+      Image(systemName: "cloud.fill")
+        .resizable()
+        .scaledToFit()
+        .frame(width: 200, height: 200)
+        .foregroundColor(.light)
+        .ignoresSafeArea()
+        .position(x: CGFloat(Int(geometry.size.width) + Int.random(in: -10...10)), y: geometry.size.height)
+    }
+  }
+  
+  func navigationButtonsView() -> some View {
+    VStack {
+      Spacer()
+      HStack {
+        if navigationRouter.index > 0 {
+          Button {
+            withAnimation {
+              navigationRouter.index -= 1
+            }
+          } label: {
+            Image(systemName: "arrow.left")
+              .resizable()
+              .scaledToFit()
+              .frame(width: 32, height: 32)
+              .foregroundColor(.contrast)
+          }
+          .buttonStyle(.plain)
+        }
+        Spacer()
+        if navigationRouter.index < 1 {
+          Button {
+            withAnimation {
+              navigationRouter.index += 1
+            }
+          } label: {
+            Image(systemName: "arrow.right")
+              .resizable()
+              .scaledToFit()
+              .frame(width: 32, height: 32)
+              .foregroundColor(.contrast)
+          }
+          .buttonStyle(.plain)
+        }
+      }
+#if os(macOS)
+      .padding(EdgeInsets(top: 8, leading: 40, bottom: 16, trailing: 40))
 #else
-    SuggestionTitleView(location: suggestion.location, description: suggestion.description, image: suggestion.images?.first)
+      .padding(EdgeInsets(top: 8, leading: 32, bottom: 0, trailing: 32))
 #endif
+    }
   }
 }
 

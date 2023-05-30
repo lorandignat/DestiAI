@@ -32,7 +32,7 @@ struct SuggestionTitleView: View {
           AsyncImage(url: image) { image in
             image.resizable()
               .aspectRatio(contentMode: .fill)
-              .position(CGPoint(x: geometry.size.width / 3, y: geometry.size.height / 7 * 2))
+              .position(CGPoint(x: geometry.size.width / 3, y: geometry.size.height / 3))
               .frame(
                 maxWidth: geometry.size.width,
                 maxHeight: geometry.size.height / 5 * 3)
@@ -40,7 +40,7 @@ struct SuggestionTitleView: View {
           } placeholder: {
             EmptyView()
           }
-          .position(CGPoint(x: geometry.size.width / 3, y: geometry.size.height / 7 * 2))
+          .position(CGPoint(x: geometry.size.width / 3, y: geometry.size.height / 3))
           .frame(
             maxWidth: geometry.size.width,
             maxHeight: geometry.size.height / 5 * 3)
@@ -48,21 +48,19 @@ struct SuggestionTitleView: View {
           .ignoresSafeArea()
           
           ZStack {
-            Rectangle()
-              .fill(Color.primaryMedium)
-              .opacity(0.90)
+            Color.light
             Text(description)
-              .font(Font.custom("HelveticaNeue-Bold", size: 20))
+              .font(Font.custom("HelveticaNeue", size: 20))
               .minimumScaleFactor(0.25)
-              .foregroundColor(Color.primaryLight)
-              .padding(EdgeInsets(top: 30, leading: 20, bottom: 30, trailing: 8))
+              .foregroundColor(Color.contrast)
+              .padding(EdgeInsets(top: 30, leading: 20, bottom: 30, trailing: 30))
               .multilineTextAlignment(.leading)
           }
           .position(CGPoint(x: geometry.size.width / 7 * 3,
-                            y:  geometry.size.height / 3 + 20))
+                            y:  geometry.size.height / 6 - 20))
           .frame(
             maxWidth: geometry.size.width / 5 * 3,
-            maxHeight: geometry.size.height / 2)
+            maxHeight: geometry.size.height / 7 * 3)
         }
       }
     }

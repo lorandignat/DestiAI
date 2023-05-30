@@ -9,11 +9,11 @@ import SwiftUI
 
 struct SidebarView: View {
   
-  @EnvironmentObject var navigationViewModel: NavigationViewModel
+  @EnvironmentObject var navigationRouter: SplitViewNavigationRouter
   @EnvironmentObject var suggestionViewModel: SuggestionViewModel
   
   var body: some View {
-    List(selection: $navigationViewModel.selectedItem) {
+    List(selection: $navigationRouter.index) {
       Section() {
         HStack {
           Spacer()
@@ -26,21 +26,12 @@ struct SidebarView: View {
             .foregroundColor(Color.primaryLight)
           Spacer()
         }
-        .deleteDisabled(true)
         .tag(0)
         .padding(EdgeInsets(top: 20, leading: 0, bottom: 20, trailing: 0))
-        .listRowBackground(Color.clear)
-        .listRowSeparator(.hidden)
-#if !os(macOS)
-        .background(UIDevice.current.userInterfaceIdiom == .phone
-                    ? (navigationViewModel.lastItemSelected == 0
-                       ? Color.contrast : Color.primaryMedium)
-                    : (navigationViewModel.selectedItem == 0 || navigationViewModel.selectedItem == nil
-                       ? Color.contrast : Color.primaryMedium))
-#else
-        .background(navigationViewModel.selectedItem == 0 || navigationViewModel.selectedItem == nil
-                    ? Color.contrast : Color.primaryMedium)
-#endif
+        .listRowBackground(Color.primaryMedium)
+        .background(navigationRouter.index == nil ?
+                    (navigationRouter.lastIndex == 0 ? Color.contrast : Color.primaryMedium) :
+                    (navigationRouter.index == 0 ? Color.contrast : Color.primaryMedium))
       }
       
       Section(header:
@@ -53,7 +44,7 @@ struct SidebarView: View {
       }) {
         ForEach(0..<suggestionViewModel.suggestions.count, id: \.self) { index in
           HStack {
-            Text("\(suggestionViewModel.suggestions[index].date.getFormattedDate(format: "MMM dd")) - \(suggestionViewModel.suggestions[index].location)")
+            Text("\(formatedDate(from: suggestionViewModel.suggestions[index].date)) - \(suggestionViewModel.suggestions[index].location)")
 #if os(macOS)
               .font(Font.custom("HelveticaNeue-Bold", size: 12))
 #else
@@ -71,19 +62,11 @@ struct SidebarView: View {
           }
           .tag(index + 1)
           .listRowBackground(Color.primaryMedium)
-#if !os(macOS)
-          .background(UIDevice.current.userInterfaceIdiom == .phone
-                      ? (navigationViewModel.lastItemSelected == index + 1
-                         ? Color.contrast : Color.primaryMedium)
-                      : (navigationViewModel.selectedItem == index + 1
-                         ? Color.contrast : Color.primaryMedium))
-#else
-          .background(navigationViewModel.selectedItem == index + 1
-                      ? Color.contrast : Color.primaryMedium)
-#endif
+          .background(navigationRouter.index == nil ?
+                      (navigationRouter.lastIndex == index + 1 ? Color.contrast : Color.primaryMedium) :
+                      (navigationRouter.index == index + 1 ? Color.contrast : Color.primaryMedium))
         }
         .background(Color.primaryMedium)
-        .listRowBackground(Color.clear)
         .listRowSeparator(.hidden)
       }
     }
@@ -97,19 +80,26 @@ struct SidebarView: View {
   }
   
   func delete(index: Int) {
-    if navigationViewModel.lastItemSelected == index + 1 {
-      navigationViewModel.selectedItem = index
-    } else if navigationViewModel.lastItemSelected >= index {
-      navigationViewModel.lastItemSelected -= 1
+    if navigationRouter.lastIndex == index + 1 {
+      navigationRouter.index = index
+    } else if navigationRouter.lastIndex >= index {
+      navigationRouter.lastIndex -= 1
     }
     suggestionViewModel.remove(at: index)
+  }
+  
+  func formatedDate(from date: Date) -> String {
+    let formatter = DateFormatter()
+    formatter.locale = Locale(identifier: "en_us")
+    formatter.setLocalizedDateFormatFromTemplate("MMM dd")
+    return formatter.string(from: date)
   }
 }
 
 struct SidebarView_Previews: PreviewProvider {
   static var previews: some View {
     SidebarView()
-      .environmentObject(NavigationViewModel())
+      .environmentObject(SplitViewNavigationRouter())
       .environmentObject(SuggestionViewModel())
   }
 }

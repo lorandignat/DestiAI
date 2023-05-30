@@ -8,6 +8,5 @@
 import Foundation
 
 protocol SuggestionService {
-  func requestSuggestion(for prompt: String,
-                         completion: @escaping (_ suggestion: Suggestion?) -> ())
+  func requestSuggestion(for prompt: String) async -> Suggestion?
 }

@@ -37,7 +37,6 @@ struct SearchView: View {
           .frame(width: geometry.size.width, height: geometry.size.height)
           .position(x: geometry.size.width - geometry.size.width / 4, y: shouldShowCloudsAnimation ? geometry.size.height / 2 : -geometry.size.height)
       }
-      
       ZStack {
         Image(systemName: "cloud.fill")
           .resizable()

@@ -16,18 +16,16 @@ class UnsplashImageService: ImageService {
   func search(for query: String) async -> [URL]? {
     
     guard let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed),
-          let url = URL(string: "\(url)?page=1&per_page=5&query=\(encodedQuery)&client_id=\(apiKey)") else {
+          let url = URL(string: "\(url)?page=1&per_page=5&query=\(encodedQuery)") else {
       return nil
     }
     
     var request = URLRequest(url: url)
     request.httpMethod = "GET"
-    
-// TODO: Figure out why it doesn't work with header
-//    request.addValue("Client-ID \(apiKey)", forHTTPHeaderField: "Authorization")
+    request.addValue("Client-ID \(apiKey)", forHTTPHeaderField: "Authorization")
     
     do {
-      let (data, _) = try await URLSession.shared.data(from: url)
+      let (data, _) = try await URLSession.shared.data(for: request)
       var images = [URL]()
       let json = try JSONSerialization.jsonObject(with: data, options: [])
       
@@ -49,8 +47,8 @@ class UnsplashImageService: ImageService {
       return images.count > 0 ? images : nil
     } catch {
       print(error.localizedDescription)
+      return nil
     }
-    return nil
   }
   
   private func download(from url: URL) async throws -> URL? {
