@@ -9,11 +9,12 @@ import Foundation
 
 class ChatGPTService: SuggestionService {
   
-  private let url = URL(string: "https://mockbin.org/bin/d0ea6172-9e38-4775-9af8-e5ab24b0342f")!
-// URL(string: "https://api.openai.com/v1/completions")!
+  private let url = URL(string: "https://mockbin.org/bin/3aa6829b-08be-4a61-b288-fb8056e9e880/")!
+//  URL(string: "https://api.openai.com/v1/completions")!
+  
   private let apiKey = "[CHAT_GPT_API_KEY]"
   
-  private let guideline = "Give answer exactly in this JSON format: {\"location\":,\"description\":,\"weather\":,\"activities\":{\"activityName\":\"description\",\"activityName\":\"description\",\"activityName\":\"description\"},\"hotels\":{\"hotelName\":\"description\",\"hotelName\":\"description\"}}"
+  private let guideline = "Suggest three activities that can be done there and two hotels in the given budget. Suggestion should be exactly in this JSON format: {\"location\":,\"description\":,\"suggestedActivities\":{\"nameOfActivityOne\":\"descriptionOfActivityOne\",\"nameOfActivityTwo\":{\"descriptionOfActivityTwo\",\"nameOfActivityThree\":\"descriptionOfActivityThree\"},\"suggestedHotels\":{\"nameOfHotelOne\":\"descriptionOfHotelOne\",\"nameOfHotelTwo\":\"descriptionOfHotelTwo\"}}"
   
   func requestSuggestion(for prompt: String) async -> Suggestion? {
     

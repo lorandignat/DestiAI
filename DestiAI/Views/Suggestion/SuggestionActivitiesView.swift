@@ -51,7 +51,7 @@ struct SuggestionActivitiesView: View {
       }
       VStack {
         let keys = Array<String>(activities.keys)
-        Spacer()
+        Spacer().frame(maxHeight: 16)
         ForEach(0..<keys.count, id: \.self) { index in
           HStack {
             if index % 2 == 0 {
@@ -60,7 +60,7 @@ struct SuggestionActivitiesView: View {
             ZStack {
               Color.light
               VStack {
-                Text(keys[index])
+                Text(keys[index].capitalized)
                   .font(Font.custom("HelveticaNeue", size: 18))
                   .minimumScaleFactor(0.5)
                   .foregroundColor(Color.contrast)

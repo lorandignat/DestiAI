@@ -86,15 +86,15 @@ struct PromptData {
           let city = city else {
       return ""
     }
-    return "Suggest a \(budget) travel destination for \(period) that is \(distance) away from \(city). I want to \(activities) and it should have \(weather) weather."
+    return "Suggest a \(budget) travel destination for \(period) that is \(distance) \(city) where I can \(activities) and which has \(weather) weather."
   }
   
   static private func promptOptions(for category: PromptCategory) -> [(option: String, prompt: String)] {
     switch category {
     case .distance:
-      return [(option: "nearby", prompt: "drive distance"),
-              (option: "not too far", prompt: "one flight distance"),
-              (option: "far", prompt: "really far")]
+      return [(option: "nearby", prompt: "close to"),
+              (option: "not too far", prompt: "flight distance from"),
+              (option: "far", prompt: "really far from")]
     case .period:
       return [(option: "spring", prompt: "spring"),
               (option: "summer", prompt: "summer"),
@@ -102,14 +102,14 @@ struct PromptData {
               (option: "winter", prompt: "winter")]
     case .budget:
       return [(option: "tight", prompt: "cheap"),
-              (option: "mid-range", prompt: "mid-range"),
-              (option: "no limit", prompt: "luxury")]
+              (option: "mid-range", prompt: "average priced"),
+              (option: "no limit", prompt: "luxurious")]
     case .weather:
       return [(option: "cold", prompt: "cool"),
               (option: "warm", prompt: "warm")]
     case .activities:
-      return [(option: "relax in the mountains", prompt: "be close to mountains"),
-              (option: "feal the breeze of the sea", prompt: "be close to the sea"),
+      return [(option: "relax in the mountains", prompt: "be in the mountains"),
+              (option: "feal the breeze of the sea", prompt: "walk on the beach"),
               (option: "explore a city", prompt: "explore a city"),
               (option: "walk in nature", prompt: "be close to nature"),
               (option: "see wildlife", prompt: "see wildlife")]
