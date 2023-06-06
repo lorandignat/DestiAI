@@ -14,7 +14,7 @@ class ChatGPTService: SuggestionService {
   
   private let apiKey = "[CHAT_GPT_API_KEY]"
   
-  private let guideline = "Suggest three activities that can be done there and two hotels in the given budget. Suggestion should be exactly in this JSON format: {\"location\":,\"description\":,\"suggestedActivities\":{\"nameOfActivityOne\":\"descriptionOfActivityOne\",\"nameOfActivityTwo\":{\"descriptionOfActivityTwo\",\"nameOfActivityThree\":\"descriptionOfActivityThree\"},\"suggestedHotels\":{\"nameOfHotelOne\":\"descriptionOfHotelOne\",\"nameOfHotelTwo\":\"descriptionOfHotelTwo\"}}"
+  private let guideline = "Suggestion should be exactly in this valid JSON format replacing only the strings between <> signes: {\"location\":\"<name>\",\"description\":\"<description>\",\"suggestedActivities\":{\"<nameOfActivity>\":\"<shortDescriptionOfActivity>\",\"<nameOfActivity>\":{\"<shortDescriptionOfActivity>\",\"<nameOfActivity>\":\"<shortDescriptionOfActivity>\"},\"suggestedHotels\":{\"<nameOfHotel>\":\"<shortDescriptionOfHotel>\",\"<nameOfHotel>\":\"<shortDescriptionOfHotel>\"}}"
   
   func requestSuggestion(for prompt: String) async -> Suggestion? {
     

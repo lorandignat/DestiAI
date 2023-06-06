@@ -40,6 +40,8 @@ class UnsplashImageService: ImageService {
              let url = urls["regular"] as? String,
              let imageUrl = URL(string: url) {
             if let fileUrl = try await download(from: imageUrl) {
+              
+              // TODO: Bug - Don't save absolute path to images, recreate the path when using
               images.append(fileUrl)
             }
           }
