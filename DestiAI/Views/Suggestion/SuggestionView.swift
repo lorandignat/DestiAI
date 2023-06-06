@@ -9,11 +9,10 @@ import SwiftUI
 
 struct SuggestionView: View {
   
-  @StateObject private var navigationRouter: SuggestionStackNavigationRouter
+  @StateObject private var navigationRouter: StackNavigationRouter
   
   init(suggestion: Suggestion) {
-    let navigationRouter = SuggestionStackNavigationRouter(suggestion: suggestion)
-    _navigationRouter = StateObject(wrappedValue: navigationRouter)
+    _navigationRouter = StateObject(wrappedValue: SuggestionStackNavigationRouter(suggestion: suggestion))
   }
   
   var body: some View {
@@ -21,13 +20,14 @@ struct SuggestionView: View {
       Color.primaryLight.ignoresSafeArea()
       ZStack {
         
-        StackNavigationView(navigationRouter: navigationRouter)
+        StackNavigationView()
+          .environmentObject(navigationRouter)
         
-        // Note: This also works on iOS
-        //#if !os(macOS)
-        //        SuggestionStackView(navigationRouter: navigationRouter)
-        //          .ignoresSafeArea()
-        //#endif
+// Note: This also work on iOS
+//#if !os(macOS)
+//        SuggestionStackView(navigationRouter: navigationRouter)
+//          .ignoresSafeArea()
+//#endif
         
         cloudsView(in: geometry)
         navigationButtonsView()
@@ -75,7 +75,9 @@ struct SuggestionView: View {
         if navigationRouter.index > 0 {
           Button {
             withAnimation {
-              navigationRouter.index -= 1
+              if navigationRouter.index > 0 {
+                navigationRouter.index -= 1
+              }
             }
           } label: {
             Image(systemName: "arrow.left")
@@ -87,10 +89,12 @@ struct SuggestionView: View {
           .buttonStyle(.plain)
         }
         Spacer()
-        if navigationRouter.index < 1 {
+        if navigationRouter.index < 2 {
           Button {
             withAnimation {
-              navigationRouter.index += 1
+              if navigationRouter.index < 2 {
+                  navigationRouter.index += 1
+              }
             }
           } label: {
             Image(systemName: "arrow.right")

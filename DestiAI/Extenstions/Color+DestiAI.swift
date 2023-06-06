@@ -8,7 +8,6 @@
 import SwiftUI
 
 extension Color {
-  
   static let primaryLight = Color("Primary100")
   static let primaryMedium = Color("Primary70")
   static let primaryDark = Color("Primary50")

@@ -32,7 +32,7 @@ struct SplitView: View {
             .toolbarBackground(Color.primaryMedium.opacity(0), for: .automatic)
 #endif
             .background(Color.primaryMedium)
-            .simultaneousGesture(
+            .gesture(
               DragGesture()
                 .onEnded { value in
                   let delta = value.translation.width

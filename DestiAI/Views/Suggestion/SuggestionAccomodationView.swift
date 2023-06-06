@@ -1,15 +1,15 @@
 //
-//  SuggestionActivitiesView.swift
+//  SuggestionWeatherView.swift
 //  DestiAI
 //
-//  Created by Lorand Ignat on 29.05.2023.
+//  Created by Lorand Ignat on 30.05.2023.
 //
 
 import SwiftUI
 
-struct SuggestionActivitiesView: View {
+struct SuggestionAccomodationView: View {
   
-  var activities: [String: String]
+  var hotels: [String: String]
   var images: [URL?]?
   
   var body: some View {
@@ -50,7 +50,7 @@ struct SuggestionActivitiesView: View {
         Spacer()
       }
       VStack {
-        let keys = Array<String>(activities.keys)
+        let keys = Array<String>(hotels.keys)
         Spacer()
         ForEach(0..<keys.count, id: \.self) { index in
           HStack {
@@ -61,16 +61,16 @@ struct SuggestionActivitiesView: View {
               Color.light
               VStack {
                 Text(keys[index])
-                  .font(Font.custom("HelveticaNeue", size: 18))
-                  .minimumScaleFactor(0.5)
+                  .font(Font.custom("HelveticaNeue", size: 20))
+                  .minimumScaleFactor(0.25)
                   .foregroundColor(Color.contrast)
-                  .padding(EdgeInsets(top: 8, leading: 10, bottom: 2, trailing: 20))
+                  .padding(EdgeInsets(top: 10, leading: 20, bottom: 4, trailing: 30))
                   .multilineTextAlignment(.leading)
-                Text(activities[keys[index]]!)
-                  .font(Font.custom("HelveticaNeue", size: 18))
-                  .minimumScaleFactor(0.5)
+                Text(hotels[keys[index]]!)
+                  .font(Font.custom("HelveticaNeue", size: 20))
+                  .minimumScaleFactor(0.25)
                   .foregroundColor(Color.contrast)
-                  .padding(EdgeInsets(top: 2, leading: 10, bottom: 8, trailing: 20))
+                  .padding(EdgeInsets(top: 4, leading: 20, bottom: 10, trailing: 30))
                   .multilineTextAlignment(.leading)
               }
             }
@@ -85,14 +85,13 @@ struct SuggestionActivitiesView: View {
           Spacer()
         }
         Spacer()
-        Spacer()
       }
     }
   }
 }
 
-struct SuggestionActivitiesView_Previews: PreviewProvider {
-  static var previews: some View {
-    SuggestionActivitiesView(activities: ["ActivitiyOne":"ActivitiyDescription"], images: nil)
-  }
+struct SuggestionWeatherView_Previews: PreviewProvider {
+    static var previews: some View {
+      SuggestionAccomodationView(hotels: ["Hotel1":"Description"], images: nil)
+    }
 }

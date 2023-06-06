@@ -12,7 +12,7 @@ struct ContentView: View {
   @EnvironmentObject var navigationRouter: SplitViewNavigationRouter
   @EnvironmentObject var inputViewModel: InputViewModel
   @EnvironmentObject var suggestionViewModel: SuggestionViewModel
-  
+
   var body: some View {
     ZStack {
       Color.primaryLight.ignoresSafeArea()

@@ -9,28 +9,43 @@ import SwiftUI
 
 struct StackNavigationView: View {
   
-  @ObservedObject var navigationRouter: StackNavigationRouter
-  
-  private var views: [AnyView]
-  
-  init(navigationRouter: StackNavigationRouter) {
-    _navigationRouter = ObservedObject(wrappedValue: navigationRouter)
-    views = [AnyView(navigationRouter.makeBody())]
-  }
+  @EnvironmentObject var navigationRouter: StackNavigationRouter
+
+  @State private var view: AnyView?
+  @State private var reverseAnimation = false
   
   var body: some View {
     VStack {
-      views.last
-        .zIndex(-1)
-        .transition(.move(edge: .leading))
+      if let view {
+        if reverseAnimation {
+          view
+            .transition(.asymmetric(insertion: .move(edge: .leading),
+                                    removal: .move(edge: .trailing)))
+        } else {
+          view
+            .transition(.asymmetric(insertion: .move(edge: .trailing),
+                                    removal: .move(edge: .leading)))
+        }
+      }
     }
-  }
-  
-  mutating func transition() {
-    if navigationRouter.shouldPush {
-      views.append(AnyView(navigationRouter.makeBody()))
-    } else if navigationRouter.shouldPop {
-      views.removeLast()
+    .onAppear() {
+      view = AnyView(navigationRouter.makeBody())
+    }
+    .onChange(of: navigationRouter.shouldPush) { newValue in
+      if newValue {
+        reverseAnimation = false
+        withAnimation {
+          view = AnyView(navigationRouter.makeBody())
+        }
+      }
+    }
+    .onChange(of: navigationRouter.shouldPop) { newValue in
+      if newValue {
+        reverseAnimation = true
+        withAnimation {
+          view = AnyView(navigationRouter.makeBody())
+        }
+      }
     }
   }
 }

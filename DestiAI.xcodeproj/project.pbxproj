@@ -32,11 +32,13 @@
 		F1628C4929F6752400F15463 /* LocationPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1628C4829F6752400F15463 /* LocationPickerView.swift */; };
 		F1628C4B29F686E100F15463 /* GeocoderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1628C4A29F686E100F15463 /* GeocoderService.swift */; };
 		F1628C4D29F6879A00F15463 /* AppleGeocoderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1628C4C29F6879A00F15463 /* AppleGeocoderService.swift */; };
+		F17886562A2F41EC0021BF74 /* Collection+SafeIndex.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17886552A2F41EC0021BF74 /* Collection+SafeIndex.swift */; };
 		F1AC929D2A24974600CDB286 /* SuggestionActivitiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1AC929C2A24974600CDB286 /* SuggestionActivitiesView.swift */; };
 		F1AC92A02A24D1CA00CDB286 /* SuggestionStackNavigationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1AC929F2A24D1CA00CDB286 /* SuggestionStackNavigationRouter.swift */; };
 		F1AC92A22A24D37E00CDB286 /* StackNavigationView_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1AC92A12A24D37E00CDB286 /* StackNavigationView_iOS.swift */; };
 		F1AC92A62A25FA0700CDB286 /* StackNavigationRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1AC92A52A25FA0700CDB286 /* StackNavigationRouter.swift */; };
 		F1AC92A82A25FACA00CDB286 /* StackNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1AC92A72A25FACA00CDB286 /* StackNavigationView.swift */; };
+		F1AC92AA2A264A7000CDB286 /* SuggestionAccomodationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1AC92A92A264A7000CDB286 /* SuggestionAccomodationView.swift */; };
 		F1B1111D2A1CF86500BA863D /* SuggestionTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B1111C2A1CF86500BA863D /* SuggestionTitleView.swift */; };
 		F1B5BF562A00F2F500E98432 /* SearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B5BF552A00F2F500E98432 /* SearchView.swift */; };
 		F1B5BF582A023F5400E98432 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1B5BF572A023F5400E98432 /* SearchViewModel.swift */; };
@@ -98,11 +100,13 @@
 		F1628C4829F6752400F15463 /* LocationPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationPickerView.swift; sourceTree = "<group>"; };
 		F1628C4A29F686E100F15463 /* GeocoderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeocoderService.swift; sourceTree = "<group>"; };
 		F1628C4C29F6879A00F15463 /* AppleGeocoderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleGeocoderService.swift; sourceTree = "<group>"; };
+		F17886552A2F41EC0021BF74 /* Collection+SafeIndex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+SafeIndex.swift"; sourceTree = "<group>"; };
 		F1AC929C2A24974600CDB286 /* SuggestionActivitiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionActivitiesView.swift; sourceTree = "<group>"; };
 		F1AC929F2A24D1CA00CDB286 /* SuggestionStackNavigationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionStackNavigationRouter.swift; sourceTree = "<group>"; };
 		F1AC92A12A24D37E00CDB286 /* StackNavigationView_iOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackNavigationView_iOS.swift; sourceTree = "<group>"; };
 		F1AC92A52A25FA0700CDB286 /* StackNavigationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackNavigationRouter.swift; sourceTree = "<group>"; };
 		F1AC92A72A25FACA00CDB286 /* StackNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StackNavigationView.swift; sourceTree = "<group>"; };
+		F1AC92A92A264A7000CDB286 /* SuggestionAccomodationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionAccomodationView.swift; sourceTree = "<group>"; };
 		F1B1111C2A1CF86500BA863D /* SuggestionTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestionTitleView.swift; sourceTree = "<group>"; };
 		F1B5BF552A00F2F500E98432 /* SearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchView.swift; sourceTree = "<group>"; };
 		F1B5BF572A023F5400E98432 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
@@ -288,6 +292,7 @@
 				F106CD6229EEBB44004BC0D2 /* Color+DestiAI.swift */,
 				F151CED529F6A72E00B2CDE2 /* CLLocationCoordinate2D+Equatable.swift */,
 				F1B5BF622A041BA300E98432 /* Date+Formatted.swift */,
+				F17886552A2F41EC0021BF74 /* Collection+SafeIndex.swift */,
 			);
 			path = Extenstions;
 			sourceTree = "<group>";
@@ -309,6 +314,7 @@
 				F1B5BF5F2A028C7D00E98432 /* SuggestionView.swift */,
 				F1B1111C2A1CF86500BA863D /* SuggestionTitleView.swift */,
 				F1AC929C2A24974600CDB286 /* SuggestionActivitiesView.swift */,
+				F1AC92A92A264A7000CDB286 /* SuggestionAccomodationView.swift */,
 			);
 			path = Suggestion;
 			sourceTree = "<group>";
@@ -456,8 +462,10 @@
 				F106CD3429EE886B004BC0D2 /* InputView.swift in Sources */,
 				F1AC92A02A24D1CA00CDB286 /* SuggestionStackNavigationRouter.swift in Sources */,
 				F1B1111D2A1CF86500BA863D /* SuggestionTitleView.swift in Sources */,
+				F17886562A2F41EC0021BF74 /* Collection+SafeIndex.swift in Sources */,
 				F102952929F134AC00C8CA5E /* ContentView.swift in Sources */,
 				F1EF83E82A13712600601EED /* ImageService.swift in Sources */,
+				F1AC92AA2A264A7000CDB286 /* SuggestionAccomodationView.swift in Sources */,
 				F1B5BF5A2A02478600E98432 /* ChatGPTService.swift in Sources */,
 				F1B5BF5C2A02766100E98432 /* Suggestion.swift in Sources */,
 				F106CD6329EEBB44004BC0D2 /* Color+DestiAI.swift in Sources */,
